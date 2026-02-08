@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="h-svh overflow-y-hidden">
+    <div>
         <div class="px-6 pt-4">
             <div class="flex justify-between items-center">
                 <h1 class="font-bold text-3xl">Personas</h1>
@@ -28,7 +28,7 @@
             @endif
         </div>
 
-        <div class="bg-white rounded-t-4xl overflow-clip overflow-y-auto h-full pb-20 mt-4">
+        <div class="bg-white rounded-t-4xl overflow-clip overflow-y-auto h-full mt-4 border-t-blue-200 border-t-2">
             <table>
                 <thead>
                 <th>RFC</th>
@@ -57,6 +57,35 @@
                 @endforeach
                 </tbody>
             </table>
+            <div class="flex justify-end items-center px-4 py-2">
+                <span>Límite:</span>
+                <form method="get">
+                    <input hidden name="pagina" value="1">
+                    <select class="py-2.5! ml-2 mr-6 btn" name="limite" id="limite">
+                        <option value="10" @selected($limite == 10)>10</option>
+                        <option value="25" @selected($limite == 25)>25</option>
+                        <option value="50" @selected($limite == 50)>50</option>
+                    </select>
+                </form>
+                <form method="get">
+                    <input hidden name="limite" value="{{ $limite }}">
+                    <input type="hidden" name="pagina" value="{{ $pagina - 1 }}">
+                    <button type="submit" class="btn" @disabled($pagina == 1)>&lt;</button>
+                </form>
+                <form method="get">
+                    <input hidden name="limite" value="{{ $limite }}">
+                    <select class="py-2.5! mx-2 btn" id="pagina" name="pagina">
+                        @for($i = 1; $i <= $paginas; $i++)
+                            <option value="{{ $i }}" @selected($pagina == $i)>{{ $i }}</option>
+                        @endfor
+                    </select>
+                </form>
+                <form method="get">
+                    <input hidden name="limite" value="{{ $limite }}">
+                    <input type="hidden" name="pagina" value="{{ $pagina + 1 }}">
+                    <button type="submit" class="btn" @disabled($pagina == $paginas)>&gt;</button>
+                </form>
+            </div>
         </div>
     </div>
 </x-layout>
@@ -74,4 +103,18 @@
         if (rfc.value.trim() === '') return;
         window.location.href = `/${rfc.value}`;
     })
+
+    function submitAlCambiarSelect(selectQuerySelector) {
+        /**
+         * @type {HTMLSelectElement}
+          */
+        const select = document.querySelector(selectQuerySelector)
+
+        select.addEventListener('change', () => {
+            select.form.submit();
+        })
+    }
+
+    submitAlCambiarSelect('#limite');
+    submitAlCambiarSelect('#pagina');
 </script>

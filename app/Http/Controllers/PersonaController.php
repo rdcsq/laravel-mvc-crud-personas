@@ -8,6 +8,7 @@ use App\Http\Requests\ActualizarPersonaRequest;
 use App\Http\Requests\CrearPersonaRequest;
 use App\Services\PersonasService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 
@@ -19,10 +20,19 @@ class PersonaController extends Controller
     {
     }
 
-    public function index(): View
+    public function index(Request $request): View
     {
+        $pagina = $request->query('pagina', 1) - 1;
+        $limite = $request->query('limite', 10);
+        $personas = $this->personasService->listar(
+            $pagina,
+            $limite
+        );
         return view('index', [
-            'personas' => $this->personasService->listar()
+            'personas' => $personas['personas'],
+            'paginas' => ceil($personas['cantidad'] / $limite),
+            'pagina' => $pagina + 1,
+            'limite' => $limite
         ]);
     }
 

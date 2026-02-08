@@ -15,16 +15,20 @@ readonly class PersonasService
     {
     }
 
-    /**
-     * @return Persona[]
-     */
-    public function listar(): array
+    public function listar(int $page = 1, int $limite = 10): array
     {
-        return $this->personaModel::with('domicilio')
+        $query = $this->personaModel::with('domicilio')
+            ->select('*')
+            ->selectRaw('count(*) over () as cantidad')
             ->orderBy('personas.rfc')
-            ->get()
-            ->map(fn(PersonaModel $persona) => Persona::fromModel($persona))
-            ->toArray();
+            ->offset($page * $limite)
+            ->limit($limite)
+            ->get();
+
+        return [
+            'personas' => $query->map(fn(PersonaModel $persona) => Persona::fromModel($persona))->toArray(),
+            'cantidad' => $query->first()['cantidad'] ?? 0
+        ];
     }
 
     public function recuperar(string $rfc): ?Persona
