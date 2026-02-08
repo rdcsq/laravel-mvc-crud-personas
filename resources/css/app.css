@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'InterVariable', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    @apply font-sans bg-blue-50 text-zinc-900;
+    font-feature-settings: "ss02" 1;
+}
+
+.btn {
+    @apply px-4 py-2 bg-blue-500 shadow-blue-500 text-white rounded-lg shadow-sm/50;
+}
+
+.divider {
+    @apply h-px my-8 bg-blue-300 w-full;
+}
+
+.form {
+    @apply [&>input]:px-3 [&>input]:py-1 [&>input]:border [&>input]:border-blue-200 [&>input]:bg-white [&>input]:rounded-md [&>input]:read-only:bg-zinc-200;
+}
+
+.two-cols {
+    @apply grid grid-cols-[auto_1fr] gap-2 items-center;
+}
+
+table {
+    @apply w-full bg-white;
+}
+
+thead {
+    @apply border-b border-blue-200 text-left;
+}
+
+th {
+    @apply px-4 py-2;
+}
+
+tr {
+    @apply not-last:border-b border-blue-200 even:bg-blue-50;
+}
+
+td {
+    @apply px-4 py-2;
+}
