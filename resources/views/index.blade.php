@@ -37,7 +37,7 @@
                 <th>Número</th>
                 <th>Colonia</th>
                 <th>CP</th>
-                <th class="w-0"></th>
+                <th class="w-min"></th>
                 </thead>
                 <tbody>
                 @foreach ($personas as $persona)
@@ -48,10 +48,15 @@
                         <td>{{ $persona->domicilio?->numero }}</td>
                         <td>{{ $persona->domicilio?->colonia }}</td>
                         <td>{{ $persona->domicilio?->cp }}</td>
-                        <td>
+                        <td class="flex gap-4">
                             <a href="/{{ $persona->rfc }}">
                                 <button type="submit">✏️</button>
                             </a>
+                            <form method="post" action="/{{ $persona->rfc }}" data-tipo="eliminar">
+                                @csrf
+                                @method('delete')
+                                <button type="submit">🗑️</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -117,4 +122,12 @@
 
     submitAlCambiarSelect('#limite');
     submitAlCambiarSelect('#pagina');
+
+    document.querySelectorAll('form[data-tipo=eliminar]').forEach(x => {
+        x.addEventListener('submit', (e) => {
+            if (!confirm('¿Está seguro de eliminar a esta persona?')) {
+                e.preventDefault();
+            }
+        })
+    })
 </script>
