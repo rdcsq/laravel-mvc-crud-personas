@@ -2,27 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Domicilio;
+use App\Entities\Persona;
 use App\Http\Requests\ActualizarPersonaRequest;
 use App\Http\Requests\CrearPersonaRequest;
-use App\Models\Persona;
+use App\Services\PersonasService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Throwable;
 
 class PersonaController extends Controller
 {
+    public function __construct(
+        private readonly PersonasService $personasService
+    )
+    {
+    }
+
     public function index(): View
     {
         return view('index', [
-            'personas' => Persona::with('domicilio')->orderBy('personas.rfc')->get()
+            'personas' => $this->personasService->listar()
         ]);
     }
 
     public function recuperar(string $rfc): View|RedirectResponse
     {
-        $persona = Persona::with('domicilio')->where('rfc', $rfc)->first();
+        $persona = $this->personasService->recuperar($rfc);
 
         if ($persona === null) {
             return redirect('/')->with('error', 'Persona no encontrada');
@@ -42,67 +48,50 @@ class PersonaController extends Controller
     {
         $validated = $request->validated();
 
-        try {
-            DB::transaction(function () use ($validated) {
-                DB::table('personas')->insert([
-                    'rfc' => $validated['rfc'],
-                    'nombre' => $validated['nombre']
-                ]);
+        $success = $this->personasService->guardar(new Persona(
+            $validated['rfc'],
+            $validated['nombre'],
+            new Domicilio(
+                $validated['calle'],
+                $validated['numero'],
+                $validated['colonia'],
+                $validated['cp']
+            )
+        ));
 
-                DB::table('domicilios')->insert([
-                    'rfc' => $validated['rfc'],
-                    'calle' => $validated['calle'],
-                    'numero' => $validated['numero'],
-                    'colonia' => $validated['colonia'],
-                    'cp' => $validated['cp'],
-                ]);
-            });
-
-            return redirect('/')->with('success', 'Persona agregada exitosamente');
-        } catch (Throwable $e) {
-            report($e);
-            return redirect('/')->with('error', 'Ocurrió un error al agregar persona');
-        }
+        return $success
+            ? redirect('/')->with('success', 'Persona agregada exitosamente')
+            : redirect('/')->with('error', 'Ocurrió un error al agregar persona');
     }
 
     public function eliminar(string $rfc): RedirectResponse
     {
-        try {
-            $eliminado = DB::table('personas')->where('rfc', $rfc)->delete();
+        $success = $this->personasService->eliminar($rfc);
 
-            if ($eliminado === 0) {
-                return redirect('/')->with('error', 'Persona no encontrada');
-            }
-
-            return redirect('/')->with('success', 'Persona eliminada exitosamente');
-        } catch (Throwable $e) {
-            report($e);
-            return redirect('/')->with('error', 'Ocurrió un error al eliminar persona');
-        }
+        return $success
+            ? redirect('/')->with('success', 'Persona eliminada exitosamente')
+            : redirect('/')->with('error', 'Ocurrió un error al eliminar persona');
     }
 
     public function editar(ActualizarPersonaRequest $request, string $rfc): RedirectResponse
     {
         $validated = $request->validated();
 
-        try {
-            DB::transaction(function () use ($validated, $rfc) {
-                DB::table('personas')->where('rfc', $rfc)->update([
-                    'nombre' => $validated['nombre']
-                ]);
+        $success = $this->personasService->actualizar(
+            new Persona(
+                $rfc,
+                $validated['nombre'],
+                new Domicilio(
+                    $validated['calle'],
+                    $validated['numero'],
+                    $validated['colonia'],
+                    $validated['cp']
+                )
+            )
+        );
 
-                DB::table('domicilios')->where('rfc', $rfc)->update([
-                    'calle' => $validated['calle'],
-                    'numero' => $validated['numero'],
-                    'colonia' => $validated['colonia'],
-                    'cp' => $validated['cp']
-                ]);
-            });
-
-            return redirect('/' . $rfc)->with('success', 'Persona actualizada exitosamente');
-        } catch (Throwable $e) {
-            report($e);
-            return redirect('/' . $rfc)->with('error', 'Ocurrió un error al actualizar persona');
-        }
+        return $success
+            ? redirect('/' . $rfc)->with('success', 'Persona actualizada exitosamente')
+            : redirect('/' . $rfc)->with('error', 'Ocurrió un error al actualizar persona');
     }
 }

@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Persona extends Model
+class PersonaModel extends Model
 {
-    /** @use HasFactory<\Database\Factories\PersonaFactory> */
+    /** @use HasFactory<\Database\Factories\PersonaModelFactory> */
     use HasFactory;
 
+    protected $table = 'personas';
     protected $primaryKey = 'rfc';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -19,6 +20,6 @@ class Persona extends Model
     protected $fillable = ['nombre'];
 
     public function domicilio(): HasOne {
-        return $this->hasOne(Domicilio::class, 'rfc', 'rfc');
+        return $this->hasOne(DomicilioModel::class, 'rfc', 'rfc');
     }
 }
