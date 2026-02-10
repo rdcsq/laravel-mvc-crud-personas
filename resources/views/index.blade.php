@@ -40,26 +40,32 @@
                 <th class="w-min"></th>
                 </thead>
                 <tbody>
-                @foreach ($personas as $persona)
+                @if (count($personas) == 0)
                     <tr>
-                        <td>{{ $persona->rfc }}</td>
-                        <td>{{ $persona->nombre }}</td>
-                        <td>{{ $persona->domicilio?->calle }}</td>
-                        <td>{{ $persona->domicilio?->numero }}</td>
-                        <td>{{ $persona->domicilio?->colonia }}</td>
-                        <td>{{ $persona->domicilio?->cp }}</td>
-                        <td class="flex gap-4">
-                            <a href="/{{ $persona->rfc }}">
-                                <button type="submit">✏️</button>
-                            </a>
-                            <form method="post" action="/{{ $persona->rfc }}" data-tipo="eliminar">
-                                @csrf
-                                @method('delete')
-                                <button type="submit">🗑️</button>
-                            </form>
-                        </td>
+                        <td colspan="7" class="text-center opacity-80 italic">No hay personas registradas</td>
                     </tr>
-                @endforeach
+                @else
+                    @foreach ($personas as $persona)
+                        <tr>
+                            <td>{{ $persona->rfc }}</td>
+                            <td>{{ $persona->nombre }}</td>
+                            <td>{{ $persona->domicilio?->calle }}</td>
+                            <td>{{ $persona->domicilio?->numero }}</td>
+                            <td>{{ $persona->domicilio?->colonia }}</td>
+                            <td>{{ $persona->domicilio?->cp }}</td>
+                            <td class="flex gap-4">
+                                <a href="/{{ $persona->rfc }}">
+                                    <button type="submit">✏️</button>
+                                </a>
+                                <form method="post" action="/{{ $persona->rfc }}" data-tipo="eliminar">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
                 </tbody>
             </table>
             <div class="flex justify-end items-center px-4 py-2">
@@ -112,7 +118,7 @@
     function submitAlCambiarSelect(selectQuerySelector) {
         /**
          * @type {HTMLSelectElement}
-          */
+         */
         const select = document.querySelector(selectQuerySelector)
 
         select.addEventListener('change', () => {
