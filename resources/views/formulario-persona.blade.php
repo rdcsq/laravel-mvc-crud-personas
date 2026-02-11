@@ -26,42 +26,42 @@
                 <div class="form two-cols">
                     <label for="rfc">RFC</label>
                     <input type="text" id="rfc" name="rfc" placeholder="RFC"
-                           value="{{ old('rfc') ?? $persona?->rfc ?? "" }}" @readonly(isset($persona))/>
+                           value="{{ old('rfc') ?? (isset($persona) ? $persona->getRfc() : "") }}" @readonly(isset($persona))/>
                     @if ($errors->has('rfc'))
                         <p class="text-red-500 text-sm col-2">{{ $errors->first('rfc') }}</p>
                     @endif
 
                     <label for="nombre">Nombre</label>
                     <input type="text" id="nombre" name="nombre" placeholder="Nombre"
-                           value="{{ old('nombre') ?? $persona?->nombre ?? "" }}"/>
+                           value="{{ old('nombre') ?? (isset($persona) ? $persona->getNombre() : "") }}"/>
                     @if ($errors->has('nombre'))
                         <p class="text-red-500 text-sm col-2">{{ $errors->first('nombre') }}</p>
                     @endif
 
                     <label for="calle">Calle</label>
                     <input type="text" id="calle" name="calle" placeholder="Calle"
-                           value="{{ old('calle') ?? $persona?->domicilio->calle ?? "" }}"/>
+                           value="{{ old('calle') ?? (isset($persona) ? $persona->getDomicilio()->getCalle() : "") }}"/>
                     @if ($errors->has('calle'))
                         <p class="text-red-500 text-sm col-2">{{ $errors->first('calle') }}</p>
                     @endif
 
                     <label for="numero">Número</label>
                     <input type="number" id="numero" name="numero" placeholder="Número"
-                           value="{{ old('numero') ?? $persona?->domicilio->numero ?? "" }}"/>
+                           value="{{ old('numero') ?? (isset($persona) ? $persona->getDomicilio()->getNumero() : "") }}"/>
                     @if ($errors->has('numero'))
                         <p class="text-red-500 text-sm col-2">{{ $errors->first('numero') }}</p>
                     @endif
 
                     <label for="colonia">Colonia</label>
                     <input type="text" id="colonia" name="colonia" placeholder="Colonia"
-                           value="{{ old('colonia') ?? $persona?->domicilio->colonia ?? "" }}"/>
+                           value="{{ old('colonia') ?? (isset($persona) ? $persona->getDomicilio()->getColonia() : "") }}"/>
                     @if ($errors->has('colonia'))
                         <p class="text-red-500 text-sm col-2">{{ $errors->first('colonia') }}</p>
                     @endif
 
                     <label for="cp">Código Postal</label>
                     <input type="number" min="0" max="99999" id="cp" name="cp" placeholder="Código Postal"
-                           value="{{ old('cp') ?? $persona?->domicilio->cp ?? "" }}"/>
+                           value="{{ old('cp') ?? (isset($persona) ? $persona->getDomicilio()->getCodigoPostal() : "") }}"/>
                     @if ($errors->has('cp'))
                         <p class="text-red-500 text-sm col-2">{{ $errors->first('cp') }}</p>
                     @endif

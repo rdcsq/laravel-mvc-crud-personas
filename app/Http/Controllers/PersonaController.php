@@ -6,7 +6,8 @@ use App\Entities\Domicilio;
 use App\Entities\Persona;
 use App\Http\Requests\ActualizarPersonaRequest;
 use App\Http\Requests\CrearPersonaRequest;
-use App\Services\PersonasService;
+use App\Services\Personas\PersonasModel;
+use App\Services\Personas\PersonasService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -15,7 +16,7 @@ use Illuminate\View\View;
 class PersonaController extends Controller
 {
     public function __construct(
-        private readonly PersonasService $personasService
+        private readonly PersonasModel $personasModel
     )
     {
     }
@@ -24,13 +25,13 @@ class PersonaController extends Controller
     {
         $pagina = $request->query('pagina', 1) - 1;
         $limite = $request->query('limite', 10);
-        $personas = $this->personasService->listar(
+        $listarPersonasDto = $this->personasModel->listar(
             $pagina,
             $limite
         );
         return view('index', [
-            'personas' => $personas['personas'],
-            'paginas' => ceil($personas['cantidad'] / $limite),
+            'personas' => $listarPersonasDto->getPersonas(),
+            'paginas' => ceil($listarPersonasDto->getCantidad() / $limite),
             'pagina' => $pagina + 1,
             'limite' => $limite
         ]);
@@ -38,7 +39,7 @@ class PersonaController extends Controller
 
     public function recuperar(string $rfc): View|RedirectResponse
     {
-        $persona = $this->personasService->recuperar($rfc);
+        $persona = $this->personasModel->recuperar($rfc);
 
         if ($persona === null) {
             return redirect('/')->with('error', 'Persona no encontrada');
@@ -58,7 +59,7 @@ class PersonaController extends Controller
     {
         $validated = $request->validated();
 
-        $success = $this->personasService->guardar(new Persona(
+        $success = $this->personasModel->guardar(new Persona(
             $validated['rfc'],
             $validated['nombre'],
             new Domicilio(
@@ -76,7 +77,7 @@ class PersonaController extends Controller
 
     public function eliminar(string $rfc): RedirectResponse
     {
-        $success = $this->personasService->eliminar($rfc);
+        $success = $this->personasModel->eliminar($rfc);
 
         return $success
             ? redirect('/')->with('success', 'Persona eliminada exitosamente')
@@ -87,7 +88,7 @@ class PersonaController extends Controller
     {
         $validated = $request->validated();
 
-        $success = $this->personasService->actualizar(
+        $success = $this->personasModel->actualizar(
             new Persona(
                 $rfc,
                 $validated['nombre'],

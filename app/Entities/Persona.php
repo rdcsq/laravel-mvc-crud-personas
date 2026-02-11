@@ -2,24 +2,30 @@
 
 namespace App\Entities;
 
-use App\Models\PersonaModel;
+use App\Models\Persona as PersonaDataModel;
 
 class Persona
 {
     public function __construct(
-        public private(set) string    $rfc,
-        public private(set) string    $nombre,
-        public private(set) Domicilio $domicilio
+        private string    $rfc,
+        private string    $nombre,
+        private Domicilio $domicilio
     )
     {
     }
 
-    public static function fromModel(PersonaModel $personaModel): self
+    public function getRfc(): string
     {
-        return new self(
-            $personaModel['rfc'],
-            $personaModel['nombre'],
-            Domicilio::fromModel($personaModel['domicilio'])
-        );
+        return $this->rfc;
+    }
+
+    public function getNombre(): string
+    {
+        return $this->nombre;
+    }
+
+    public function getDomicilio(): Domicilio
+    {
+        return $this->domicilio;
     }
 }

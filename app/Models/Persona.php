@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\PersonaFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class PersonaModel extends Model
+class Persona extends Model
 {
-    /** @use HasFactory<\Database\Factories\PersonaModelFactory> */
+    /** @use HasFactory<PersonaFactory> */
     use HasFactory;
 
     protected $table = 'personas';
@@ -20,6 +21,6 @@ class PersonaModel extends Model
     protected $fillable = ['nombre'];
 
     public function domicilio(): HasOne {
-        return $this->hasOne(DomicilioModel::class, 'rfc', 'rfc');
+        return $this->hasOne(Domicilio::class, 'rfc', 'rfc');
     }
 }

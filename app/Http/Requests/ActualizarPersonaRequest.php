@@ -27,7 +27,7 @@ class ActualizarPersonaRequest extends FormRequest
             'calle' => ['required', 'string', 'max:255', 'min:2'],
             'numero' => ['required', 'integer', 'min:1'],
             'colonia' => ['required', 'string', 'max:255', 'min:2'],
-            'cp' => ['required', 'integer', 'min:1', 'max:99999']
+            'cp' => ['required', 'integer', 'digits:5']
         ];
     }
 }

@@ -2,25 +2,33 @@
 
 namespace App\Entities;
 
-use App\Models\DomicilioModel;
-
 class Domicilio
 {
     public function __construct(
-        public private(set) string $calle,
-        public private(set) int    $numero,
-        public private(set) string $colonia,
-        public private(set) int    $cp)
+        private string $calle,
+        private int    $numero,
+        private string $colonia,
+        private int    $cp)
     {
     }
 
-    public static function fromModel(DomicilioModel $domicilioModel): self
+    public function getCalle(): string
     {
-        return new self(
-            $domicilioModel['calle'],
-            $domicilioModel['numero'],
-            $domicilioModel['colonia'],
-            $domicilioModel['cp']
-        );
+        return $this->calle;
+    }
+
+    public function getNumero(): int
+    {
+        return $this->numero;
+    }
+
+    public function getColonia(): string
+    {
+        return $this->colonia;
+    }
+
+    public function getCodigoPostal(): int
+    {
+        return $this->cp;
     }
 }

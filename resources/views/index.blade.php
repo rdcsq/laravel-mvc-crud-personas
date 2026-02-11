@@ -40,24 +40,24 @@
                 <th class="w-min"></th>
                 </thead>
                 <tbody>
-                @if (count($personas) == 0)
+                @if (count($personas) === 0)
                     <tr>
                         <td colspan="7" class="text-center opacity-80 italic">No hay personas registradas</td>
                     </tr>
                 @else
                     @foreach ($personas as $persona)
                         <tr>
-                            <td>{{ $persona->rfc }}</td>
-                            <td>{{ $persona->nombre }}</td>
-                            <td>{{ $persona->domicilio?->calle }}</td>
-                            <td>{{ $persona->domicilio?->numero }}</td>
-                            <td>{{ $persona->domicilio?->colonia }}</td>
-                            <td>{{ $persona->domicilio?->cp }}</td>
+                            <td>{{ $persona->getRfc() }}</td>
+                            <td>{{ $persona->getNombre() }}</td>
+                            <td>{{ $persona->getDomicilio()->getCalle() }}</td>
+                            <td>{{ $persona->getDomicilio()->getNumero() }}</td>
+                            <td>{{ $persona->getDomicilio()->getColonia() }}</td>
+                            <td>{{ $persona->getDomicilio()->getCodigoPostal() }}</td>
                             <td class="flex gap-4">
-                                <a href="/{{ $persona->rfc }}">
+                                <a href="/{{ $persona->getRfc() }}">
                                     <button type="submit">✏️</button>
                                 </a>
-                                <form method="post" action="/{{ $persona->rfc }}" data-tipo="eliminar">
+                                <form method="post" action="/{{ $persona->getRfc() }}" data-tipo="eliminar">
                                     @csrf
                                     @method('delete')
                                     <button type="submit">🗑️</button>

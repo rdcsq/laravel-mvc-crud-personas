@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\PersonaModel;
+use App\Models\Persona;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DomicilioModel>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Domicilio>
  */
-class DomicilioModelFactory extends Factory
+class DomicilioFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,7 @@ class DomicilioModelFactory extends Factory
     public function definition(): array
     {
         return [
-            'rfc' => PersonaModel::factory(),
+            'rfc' => Persona::factory(),
             'calle' => fake()->streetName,
             'numero' => fake()->buildingNumber,
             'colonia' => fake()->streetSuffix,
