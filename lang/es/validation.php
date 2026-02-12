@@ -15,6 +15,7 @@ return [
     'exists'   => 'El :attribute seleccionado no es válido.',
     'regex'    => 'El formato de :attribute no es válido.',
     'unique'   => 'Un registro con el :attribute especificado ya existe.',
+    'digits'   => 'El campo :attribute debe tener :digits dígitos.',
 
     'attributes' => [
         'rfc'     => 'RFC',
