@@ -60,13 +60,13 @@ class PersonaController extends Controller
         $validated = $request->validated();
 
         $success = $this->personasModel->guardar(new Persona(
-            $validated['rfc'],
-            $validated['nombre'],
+            $validated->rfc,
+            $validated->nombre,
             new Domicilio(
-                $validated['calle'],
-                $validated['numero'],
-                $validated['colonia'],
-                $validated['cp']
+                $validated->calle,
+                $validated->numero,
+                $validated->colonia,
+                $validated->cp
             )
         ));
 
@@ -91,12 +91,12 @@ class PersonaController extends Controller
         $success = $this->personasModel->actualizar(
             new Persona(
                 $rfc,
-                $validated['nombre'],
+                $validated->nombre,
                 new Domicilio(
-                    $validated['calle'],
-                    $validated['numero'],
-                    $validated['colonia'],
-                    $validated['cp']
+                    $validated->calle,
+                    $validated->numero,
+                    $validated->colonia,
+                    $validated->cp
                 )
             )
         );
