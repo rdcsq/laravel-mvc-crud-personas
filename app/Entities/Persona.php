@@ -2,8 +2,6 @@
 
 namespace App\Entities;
 
-use App\Models\Persona as PersonaDataModel;
-
 class Persona
 {
     public function __construct(
